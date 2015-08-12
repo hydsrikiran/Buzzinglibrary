@@ -128,3 +128,4 @@ update
 set
     t.SUN = NVL(t.SUN,'N'), 	t.MON = NVL(t.MON,'N'), 	t.TUE = NVL(t.TUE,'N'), 	t.WED = NVL(t.WED,'N'),
 	t.THU = NVL(t.THU,'N'), 	t.FRI = NVL(t.FRI,'N'), 	t.SAT = NVL(t.SAT,'N');
+commit;

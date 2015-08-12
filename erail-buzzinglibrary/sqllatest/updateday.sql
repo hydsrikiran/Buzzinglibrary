@@ -11,13 +11,14 @@ orgnum_fri VARCHAR2(1):='N';
 orgnum_sat VARCHAR2(1):='N';
 type schedule_cursor is ref cursor;
 sched   schedule_cursor;
-sched1 schedule%rowtype;
-CURSOR trainid_cur IS select distinct train from train order by train;
-  BEGIN
-     OPEN trainid_cur;
+--sched1 schedule%rowtype;
+begin
+for j in (select distinct train from train order by train asc)
+  --BEGIN
+     --OPEN trainid_cur;
      LOOP
-        FETCH trainid_cur INTO train_id;
-        EXIT WHEN trainid_cur%NOTFOUND;
+        --FETCH trainid_cur INTO train_id;
+        --EXIT WHEN trainid_cur%NOTFOUND;
         orgnum_sun:='N';
         orgnum_mon:='N';
         orgnum_tue:='N';
@@ -25,249 +26,249 @@ CURSOR trainid_cur IS select distinct train from train order by train;
         orgnum_thu:='N';
         orgnum_fri:='N';
         orgnum_sat:='N';
-        --dbms_output.put_line(train_id||'~~'||count_tmp);
+        dbms_output.put_line(j.train||'~~'||count_tmp);
         v_sno:=1;
-        open sched for select * from schedule where train = train_id  order by DISTANCE;
+        for i in( select * from schedule where train = j.train  order by DISTANCE asc)
         loop
-          fetch sched into sched1;
-          EXIT WHEN sched%NOTFOUND;
-          --dbms_output.put_line(sched1.train||'~~'||sched1.station||'~~'||sched1."day"||'~~'||sched1.SUN||'~~'||sched1.MON||'~~'||sched1.TUE||'~~'||sched1.WED||'~~'||sched1.THU||'~~'||sched1.FRI||'~~'||sched1.SAT);
+          --fetch sched into sched1;
+          --EXIT WHEN sched%NOTFOUND;
+          dbms_output.put_line(i.train||'~~'||i.station||'~~'||i.day||'~~'||i.SUN||'~~'||i.MON||'~~'||i.TUE||'~~'||i.WED||'~~'||i.THU||'~~'||i.FRI||'~~'||i.SAT);
           if(v_sno>1) then
           --(
-              --dbms_output.put_line(sched1.train||'~~'||sched1.station||'~~'||sched1."day"||'~~'||sched1.SUN||'~~'||sched1.MON||'~~'||sched1.TUE||'~~'||sched1.WED||'~~'||sched1.THU||'~~'||sched1.FRI||'~~'||sched1.SAT);
+              --dbms_output.put_line(i.train||'~~'||i.station||'~~'||i.day||'~~'||i.SUN||'~~'||i.MON||'~~'||i.TUE||'~~'||i.WED||'~~'||i.THU||'~~'||i.FRI||'~~'||i.SAT);
               if orgnum_sun='Y' then
-                if sched1."day" = 1 then
-                  update schedule set sun='Y' where distance=sched1.distance and sun<>'Y';
+                if i.day = 1 then
+                  update schedule set sun='Y' where train=i.train and distance=i.distance and sun<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 2 then
-                  update schedule set mon='Y' where distance=sched1.distance and mon<>'Y';
+                if i.day = 2 then
+                  update schedule set mon='Y' where train=i.train and distance=i.distance and mon<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 3 then
-                  update schedule set tue='Y' where distance=sched1.distance and tue<>'Y';
+                if i.day = 3 then
+                  update schedule set tue='Y' where train=i.train and distance=i.distance and tue<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 4 then
-                  update schedule set wed='Y' where distance=sched1.distance and wed<>'Y';
+                if i.day = 4 then
+                  update schedule set wed='Y' where train=i.train and distance=i.distance and wed<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 5 then
-                  update schedule set thu='Y' where distance=sched1.distance and thu<>'Y';
+                if i.day = 5 then
+                  update schedule set thu='Y' where train=i.train and distance=i.distance and thu<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 6 then
-                  update schedule set fri='Y' where distance=sched1.distance and fri<>'Y';
+                if i.day = 6 then
+                  update schedule set fri='Y' where train=i.train and distance=i.distance and fri<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 7 then
-                  update schedule set sat='Y' where distance=sched1.distance and sat<>'Y';
+                if i.day = 7 then
+                  update schedule set sat='Y' where train=i.train and distance=i.distance and sat<>'Y';
                   commit;
                 end if;
               end if;
               
               if orgnum_mon='Y' then
-                if sched1."day" = 7 then
-                  update schedule set sun='Y' where distance=sched1.distance and sun<>'Y';
+                if i.day = 7 then
+                  update schedule set sun='Y' where train=i.train and distance=i.distance and sun<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 1 then
-                  update schedule set mon='Y' where distance=sched1.distance and mon<>'Y';
+                if i.day = 1 then
+                  update schedule set mon='Y' where train=i.train and distance=i.distance and mon<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 2 then
-                  update schedule set tue='Y' where distance=sched1.distance and tue<>'Y';
+                if i.day = 2 then
+                  update schedule set tue='Y' where train=i.train and distance=i.distance and tue<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 3 then
-                  update schedule set wed='Y' where distance=sched1.distance and wed<>'Y';
+                if i.day = 3 then
+                  update schedule set wed='Y' where train=i.train and distance=i.distance and wed<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 4 then
-                  update schedule set thu='Y' where distance=sched1.distance and thu<>'Y';
+                if i.day = 4 then
+                  update schedule set thu='Y' where train=i.train and distance=i.distance and thu<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 5 then
-                  update schedule set fri='Y' where distance=sched1.distance and fri<>'Y';
+                if i.day = 5 then
+                  update schedule set fri='Y' where train=i.train and distance=i.distance and fri<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 6 then
-                  update schedule set sat='Y' where distance=sched1.distance and sat<>'Y';
+                if i.day = 6 then
+                  update schedule set sat='Y' where train=i.train and distance=i.distance and sat<>'Y';
                   commit;
                 end if;
               end if;
               
               if orgnum_tue='Y' then
-                if sched1."day" = 6 then
-                  update schedule set sun='Y' where distance=sched1.distance and sun<>'Y';
+                if i.day = 6 then
+                  update schedule set sun='Y' where train=i.train and distance=i.distance and sun<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 7 then
-                  update schedule set mon='Y' where distance=sched1.distance and mon<>'Y';
+                if i.day = 7 then
+                  update schedule set mon='Y' where train=i.train and distance=i.distance and mon<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 1 then
-                  update schedule set tue='Y' where distance=sched1.distance and tue<>'Y';
+                if i.day = 1 then
+                  update schedule set tue='Y' where train=i.train and distance=i.distance and tue<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 2 then
-                  update schedule set wed='Y' where distance=sched1.distance and wed<>'Y';
+                if i.day = 2 then
+                  update schedule set wed='Y' where train=i.train and distance=i.distance and wed<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 3 then
-                  update schedule set thu='Y' where distance=sched1.distance and thu<>'Y';
+                if i.day = 3 then
+                  update schedule set thu='Y' where train=i.train and distance=i.distance and thu<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 4 then
-                  update schedule set fri='Y' where distance=sched1.distance and fri<>'Y';
+                if i.day = 4 then
+                  update schedule set fri='Y' where train=i.train and distance=i.distance and fri<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 5 then
-                  update schedule set sat='Y' where distance=sched1.distance and sat<>'Y';
+                if i.day = 5 then
+                  update schedule set sat='Y' where train=i.train and distance=i.distance and sat<>'Y';
                   commit;
                 end if;
               end if;
               
               if orgnum_wed='Y' then
-                if sched1."day" = 5 then
-                  update schedule set sun='Y' where distance=sched1.distance and sun<>'Y';
+                if i.day = 5 then
+                  update schedule set sun='Y' where train=i.train and distance=i.distance and sun<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 6 then
-                  update schedule set mon='Y' where distance=sched1.distance and mon<>'Y';
+                if i.day = 6 then
+                  update schedule set mon='Y' where train=i.train and distance=i.distance and mon<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 7 then
-                  update schedule set tue='Y' where distance=sched1.distance and tue<>'Y';
+                if i.day = 7 then
+                  update schedule set tue='Y' where train=i.train and distance=i.distance and tue<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 1 then
-                  update schedule set wed='Y' where distance=sched1.distance and wed<>'Y';
+                if i.day = 1 then
+                  update schedule set wed='Y' where train=i.train and distance=i.distance and wed<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 2 then
-                  update schedule set thu='Y' where distance=sched1.distance and thu<>'Y';
+                if i.day = 2 then
+                  update schedule set thu='Y' where train=i.train and distance=i.distance and thu<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 3 then
-                  update schedule set fri='Y' where distance=sched1.distance and fri<>'Y';
+                if i.day = 3 then
+                  update schedule set fri='Y' where train=i.train and distance=i.distance and fri<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 4 then
-                  update schedule set sat='Y' where distance=sched1.distance and sat<>'Y';
+                if i.day = 4 then
+                  update schedule set sat='Y' where train=i.train and distance=i.distance and sat<>'Y';
                   commit;
                 end if;
               end if;
               
               if orgnum_thu='Y' then
-                if sched1."day" = 4 then
-                  update schedule set sun='Y' where distance=sched1.distance and sun<>'Y';
+                if i.day = 4 then
+                  update schedule set sun='Y' where train=i.train and distance=i.distance and sun<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 5 then
-                  update schedule set mon='Y' where distance=sched1.distance and mon<>'Y';
+                if i.day = 5 then
+                  update schedule set mon='Y' where train=i.train and distance=i.distance and mon<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 6 then
-                  update schedule set tue='Y' where distance=sched1.distance and tue<>'Y';
+                if i.day = 6 then
+                  update schedule set tue='Y' where train=i.train and distance=i.distance and tue<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 7 then
-                  update schedule set wed='Y' where distance=sched1.distance and wed<>'Y';
+                if i.day = 7 then
+                  update schedule set wed='Y' where train=i.train and distance=i.distance and wed<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 1 then
-                  update schedule set thu='Y' where distance=sched1.distance and thu<>'Y';
+                if i.day = 1 then
+                  update schedule set thu='Y' where train=i.train and distance=i.distance and thu<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 2 then
-                  update schedule set fri='Y' where distance=sched1.distance and fri<>'Y';
+                if i.day = 2 then
+                  update schedule set fri='Y' where train=i.train and distance=i.distance and fri<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 3 then
-                  update schedule set sat='Y' where distance=sched1.distance and sat<>'Y';
+                if i.day = 3 then
+                  update schedule set sat='Y' where train=i.train and distance=i.distance and sat<>'Y';
                   commit;
                 end if;
               end if;
               
               if orgnum_fri='Y' then
-                if sched1."day" = 3 then
-                  update schedule set sun='Y' where distance=sched1.distance and sun<>'Y';
+                if i.day = 3 then
+                  update schedule set sun='Y' where train=i.train and distance=i.distance and sun<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 4 then
-                  update schedule set mon='Y' where distance=sched1.distance and mon<>'Y';
+                if i.day = 4 then
+                  update schedule set mon='Y' where train=i.train and distance=i.distance and mon<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 5 then
-                  update schedule set tue='Y' where distance=sched1.distance and tue<>'Y';
+                if i.day = 5 then
+                  update schedule set tue='Y' where train=i.train and distance=i.distance and tue<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 6 then
-                  update schedule set wed='Y' where distance=sched1.distance and wed<>'Y';
+                if i.day = 6 then
+                  update schedule set wed='Y' where train=i.train and distance=i.distance and wed<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 7 then
-                  update schedule set thu='Y' where distance=sched1.distance and thu<>'Y';
+                if i.day = 7 then
+                  update schedule set thu='Y' where train=i.train and distance=i.distance and thu<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 1 then
-                  update schedule set fri='Y' where distance=sched1.distance and fri<>'Y';
+                if i.day = 1 then
+                  update schedule set fri='Y' where train=i.train and distance=i.distance and fri<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 2 then
-                  update schedule set sat='Y' where distance=sched1.distance and sat<>'Y';
+                if i.day = 2 then
+                  update schedule set sat='Y' where train=i.train and distance=i.distance and sat<>'Y';
                   commit;
                 end if;
               end if;
               
               if orgnum_sat='Y' then
-                if sched1."day" = 2 then
-                  update schedule set sun='Y' where distance=sched1.distance and sun<>'Y';
+                if i.day = 2 then
+                  update schedule set sun='Y' where train=i.train and distance=i.distance and sun<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 3 then
-                  update schedule set mon='Y' where distance=sched1.distance and mon<>'Y';
+                if i.day = 3 then
+                  update schedule set mon='Y' where train=i.train and distance=i.distance and mon<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 4 then
-                  update schedule set tue='Y' where distance=sched1.distance and tue<>'Y';
+                if i.day = 4 then
+                  update schedule set tue='Y' where train=i.train and distance=i.distance and tue<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 5 then
-                  update schedule set wed='Y' where distance=sched1.distance and wed<>'Y';
+                if i.day = 5 then
+                  update schedule set wed='Y' where train=i.train and distance=i.distance and wed<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 6 then
-                  update schedule set thu='Y' where distance=sched1.distance and thu<>'Y';
+                if i.day = 6 then
+                  update schedule set thu='Y' where train=i.train and distance=i.distance and thu<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 7 then
-                  update schedule set fri='Y' where distance=sched1.distance and fri<>'Y';
+                if i.day = 7 then
+                  update schedule set fri='Y' where train=i.train and distance=i.distance and fri<>'Y';
                   commit;
                 end if;
-                if sched1."day" = 1 then
-                  update schedule set sat='Y' where distance=sched1.distance and sat<>'Y';
+                if i.day = 1 then
+                  update schedule set sat='Y' where train=i.train and distance=i.distance and sat<>'Y';
                   commit;
                 end if;
               end if;
           --)
           else
           --(
-              orgnum_sun:=sched1.sun;
-              orgnum_mon:=sched1.mon;
-              orgnum_tue:=sched1.tue;
-              orgnum_wed:=sched1.wed;
-              orgnum_thu:=sched1.thu;
-              orgnum_fri:=sched1.fri;
-              orgnum_sat:=sched1.sat;
+              orgnum_sun:=i.sun;
+              orgnum_mon:=i.mon;
+              orgnum_tue:=i.tue;
+              orgnum_wed:=i.wed;
+              orgnum_thu:=i.thu;
+              orgnum_fri:=i.fri;
+              orgnum_sat:=i.sat;
           --)
           end if;
-          --update schedule set sno = v_sno where distance=sched1.distance;
+          --update schedule set sno = v_sno where train=i.train and distance=i.distance;
           --commit;
           v_sno:=v_sno+1;
           end loop;
-       close sched ;
+       --close sched ;
     END LOOP;
-    CLOSE trainid_cur;
+    --CLOSE trainid_cur;
 end updateday;
