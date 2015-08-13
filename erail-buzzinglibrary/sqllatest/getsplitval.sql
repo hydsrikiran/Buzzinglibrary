@@ -129,3 +129,9 @@ set
     t.SUN = NVL(t.SUN,'N'), 	t.MON = NVL(t.MON,'N'), 	t.TUE = NVL(t.TUE,'N'), 	t.WED = NVL(t.WED,'N'),
 	t.THU = NVL(t.THU,'N'), 	t.FRI = NVL(t.FRI,'N'), 	t.SAT = NVL(t.SAT,'N');
 commit;
+
+@exec updateday;
+update schedule set Arrival='00:00' where Arrival='Source';
+update schedule set DEPARTURE='00:00' where DEPARTURE='Destination';
+commit;
+create table trail_detail_reg_sf as select * from schedule;
