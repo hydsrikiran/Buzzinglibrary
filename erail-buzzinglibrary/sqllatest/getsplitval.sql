@@ -135,3 +135,20 @@ update schedule set Arrival='00:00' where Arrival='Source';
 update schedule set DEPARTURE='00:00' where DEPARTURE='Destination';
 commit;
 create table trail_detail_reg_sf as select * from schedule;
+
+
+---
+create table trail_detail_reg_sf_13082015 as select * from trail_detail_reg_sf;
+create table train_13082015 as select * from train;
+
+INSERT INTO trail_detail_reg_sf (STATIONCODE, TRAINNUMBER, ARRIVAL, DEPARTURE, DAY, SUN, MON, TUE, WED, THU, FRI, SAT, SNO)
+(SELECT STATION, TRAIN, ARRIVAL, DEPARTURE, DAY, SUN, MON, TUE, WED, THU, FRI, SAT, DISTANCE FROM SCHEDULE);
+
+alter table train modify column train -- number, train_name -- name
+ALTER TABLE train CHANGE TRAIN number CHAR(10);
+ALTER TABLE train CHANGE TRAIN_NAME train_name CHAR(3`0);
+
+
+update trail_detail_reg_sf set SUN=if(SUN='Y',1,0), MON=if(MON='Y',1,0), TUE=if(TUE='Y',1,0), WED=if(WED='Y',1,0), THU=if(THU='Y',1,0), FRI=if(FRI='Y',1,0), SAT=if(SAT='Y',1,0);
+update train set SUN=if(SUN='Y',1,0), MON=if(MON='Y',1,0), TUE=if(TUE='Y',1,0), WED=if(WED='Y',1,0), THU=if(THU='Y',1,0), FRI=if(FRI='Y',1,0), SAT=if(SAT='Y',1,0);
+update train set 1A=if(1A='Y',1,0),FC=if(FC='Y',1,0),2A=if(2A='Y',1,0),3A=if(3A='Y',1,0),3E=if(3E='Y',1,0),CC=if(CC='Y',1,0),SL=if(SL='Y',1,0),2S=if(2S='Y',1,0);
